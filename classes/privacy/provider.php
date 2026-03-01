@@ -26,15 +26,15 @@ namespace local_fastcomments\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\metadata\provider as metadata_provider;
+use core_privacy\local\request\user_preference_provider;
 
 /**
  * Privacy provider for local_fastcomments.
  *
- * Declares external data sent to the FastComments service.
- * No local database tables are used, so no data export/deletion
- * is needed within Moodle — FastComments handles that directly.
+ * Declares external data sent to the FastComments service and exports
+ * user notification preferences.
  */
-class provider implements metadata_provider {
+class provider implements metadata_provider, user_preference_provider {
 
     /**
      * Describe the external data sent to FastComments.
@@ -55,5 +55,32 @@ class provider implements metadata_provider {
         );
 
         return $collection;
+    }
+
+    /**
+     * Export user preferences for the plugin.
+     *
+     * @param int $userid The user ID to export preferences for.
+     */
+    public static function export_user_preferences(int $userid) {
+        $optedin = get_user_preferences('local_fastcomments_optedinnotifications', null, $userid);
+        if ($optedin !== null) {
+            \core_privacy\local\request\writer::export_user_preference(
+                'local_fastcomments',
+                'local_fastcomments_optedinnotifications',
+                $optedin,
+                get_string('privacy:metadata:preference:optedinnotifications', 'local_fastcomments')
+            );
+        }
+
+        $optedsub = get_user_preferences('local_fastcomments_optedinsubscriptionnotifications', null, $userid);
+        if ($optedsub !== null) {
+            \core_privacy\local\request\writer::export_user_preference(
+                'local_fastcomments',
+                'local_fastcomments_optedinsubscriptionnotifications',
+                $optedsub,
+                get_string('privacy:metadata:preference:optedinsubscriptionnotifications', 'local_fastcomments')
+            );
+        }
     }
 }

@@ -156,7 +156,10 @@ function local_fastcomments_build_secure_sso($isloggedin, $loginurl, $logouturl)
             'id'       => (string)$USER->id,
             'email'    => $USER->email,
             'username' => fullname($USER),
-            'optedInNotifications' => true,
+            'optedInNotifications' => (bool)get_user_preferences('local_fastcomments_optedinnotifications', 1),
+            'optedInSubscriptionNotifications' => (bool)get_user_preferences(
+                'local_fastcomments_optedinsubscriptionnotifications', 1
+            ),
         ];
 
         // Get avatar URL.
@@ -210,4 +213,71 @@ function local_fastcomments_build_simple_sso($isloggedin, $loginurl) {
     }
 
     return $sso;
+}
+
+/**
+ * Add FastComments notification preferences link to user profile navigation.
+ *
+ * @param \core_user\output\myprofile\tree $tree The profile navigation tree.
+ * @param stdClass $user The user whose profile is being viewed.
+ * @param bool $iscurrentuser Whether the profile belongs to the current user.
+ * @param stdClass|null $course The current course, if any.
+ */
+function local_fastcomments_myprofile_navigation(
+    \core_user\output\myprofile\tree $tree,
+    $user,
+    $iscurrentuser,
+    $course
+) {
+    if (!$iscurrentuser) {
+        return;
+    }
+
+    $category = new \core_user\output\myprofile\category(
+        'fastcomments',
+        get_string('pluginname', 'local_fastcomments'),
+        'privacyandpolicies'
+    );
+    $tree->add_category($category);
+
+    $tree->add_node(new \core_user\output\myprofile\node(
+        'fastcomments',
+        'preferences',
+        get_string('preferences_link', 'local_fastcomments'),
+        null,
+        new moodle_url('/local/fastcomments/preferences.php')
+    ));
+}
+
+/**
+ * Declare user preferences used by this plugin.
+ *
+ * @return array[] Preference definitions keyed by preference name.
+ */
+function local_fastcomments_user_preferences() {
+    $preferences = [];
+
+    $preferences['local_fastcomments_optedinnotifications'] = [
+        'type' => PARAM_INT,
+        'null' => NULL_NOT_ALLOWED,
+        'default' => 1,
+        'choices' => [0, 1],
+        'permissioncallback' => function ($user, $preferencename) {
+            global $USER;
+            return $user->id == $USER->id;
+        },
+    ];
+
+    $preferences['local_fastcomments_optedinsubscriptionnotifications'] = [
+        'type' => PARAM_INT,
+        'null' => NULL_NOT_ALLOWED,
+        'default' => 1,
+        'choices' => [0, 1],
+        'permissioncallback' => function ($user, $preferencename) {
+            global $USER;
+            return $user->id == $USER->id;
+        },
+    ];
+
+    return $preferences;
 }

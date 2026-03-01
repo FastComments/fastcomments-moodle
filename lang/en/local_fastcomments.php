@@ -41,9 +41,20 @@ $string['setting_pagecontexts_desc'] = 'Select which page types should display t
 $string['setting_cdn'] = 'CDN URL';
 $string['setting_cdn_desc'] = 'The FastComments CDN URL. Change to https://cdn-eu.fastcomments.com for EU data residency.';
 
+// Preferences.
+$string['preferences_title'] = 'FastComments notification preferences';
+$string['preferences_link'] = 'Notification preferences';
+$string['preferences_saved'] = 'Notification preferences saved.';
+$string['pref_optedinnotifications'] = 'Comment reply notifications';
+$string['pref_optedinnotifications_help'] = 'When enabled, you will receive email notifications when someone replies to your comments.';
+$string['pref_optedinsubscriptionnotifications'] = 'Subscription notifications';
+$string['pref_optedinsubscriptionnotifications_help'] = 'When enabled, you will receive email notifications for threads you have subscribed to.';
+
 // Privacy.
 $string['privacy:metadata:fastcomments'] = 'FastComments commenting service';
 $string['privacy:metadata:fastcomments:userid'] = 'The Moodle user ID is sent to identify the user.';
 $string['privacy:metadata:fastcomments:email'] = 'The user email is sent so FastComments can send notification emails.';
 $string['privacy:metadata:fastcomments:fullname'] = 'The user full name is sent to display as the commenter name.';
 $string['privacy:metadata:fastcomments:avatar'] = 'The user profile picture URL is sent to display as the commenter avatar.';
+$string['privacy:metadata:preference:optedinnotifications'] = 'Whether the user has opted in to comment reply notifications (1 = yes, 0 = no).';
+$string['privacy:metadata:preference:optedinsubscriptionnotifications'] = 'Whether the user has opted in to subscription notifications (1 = yes, 0 = no).';
