@@ -69,6 +69,20 @@ if ($hassiteconfig) {
         ]
     ));
 
+    // Commenting Style.
+    $styleoptions = [
+        'comments' => get_string('setting_commentstyle_comments', 'local_fastcomments'),
+        'collabchat_comments' => get_string('setting_commentstyle_collabchat_comments', 'local_fastcomments'),
+        'collabchat' => get_string('setting_commentstyle_collabchat', 'local_fastcomments'),
+    ];
+    $settings->add(new admin_setting_configselect(
+        'local_fastcomments/commentstyle',
+        get_string('setting_commentstyle', 'local_fastcomments'),
+        get_string('setting_commentstyle_desc', 'local_fastcomments'),
+        'comments',
+        $styleoptions
+    ));
+
     // CDN URL.
     $settings->add(new admin_setting_configtext(
         'local_fastcomments/cdn',

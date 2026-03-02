@@ -39,6 +39,11 @@ $string['setting_context_course'] = 'Course pages';
 $string['setting_context_module'] = 'Activity/Module pages';
 $string['setting_pagecontexts'] = 'Show comments on';
 $string['setting_pagecontexts_desc'] = 'Select which page types should display the FastComments widget.';
+$string['setting_commentstyle'] = 'Commenting Style';
+$string['setting_commentstyle_desc'] = 'Choose how commenting works on your pages. Collab Chat allows people to create discussions around highlighted pieces of text.';
+$string['setting_commentstyle_comments'] = 'Comments below content';
+$string['setting_commentstyle_collabchat_comments'] = 'Collab Chat + Comments below content';
+$string['setting_commentstyle_collabchat'] = 'Collab Chat only';
 $string['setting_cdn'] = 'CDN URL';
 $string['setting_cdn_desc'] = 'The FastComments CDN URL. Change to https://cdn-eu.fastcomments.com for EU data residency.';
 

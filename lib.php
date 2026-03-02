@@ -97,11 +97,53 @@ function local_fastcomments_before_footer() {
     }
     // ssotype === 'none': no SSO config added.
 
+    $commentstyle = get_config('local_fastcomments', 'commentstyle');
+    if (empty($commentstyle)) {
+        $commentstyle = 'comments';
+    }
+
     $jsonconfig = json_encode($config, JSON_UNESCAPED_SLASHES);
     $urlid_js = addslashes($urlid);
 
-    // Load the CDN embed script via Moodle's JS API.
-    $PAGE->requires->js(new moodle_url($cdn . '/js/embed-v2.min.js'));
+    $needscomments = ($commentstyle === 'comments' || $commentstyle === 'collabchat_comments');
+    $needscollabchat = ($commentstyle === 'collabchat' || $commentstyle === 'collabchat_comments');
+
+    // Load the CDN embed script(s) via Moodle's JS API.
+    if ($needscomments) {
+        $PAGE->requires->js(new moodle_url($cdn . '/js/embed-v2.min.js'));
+    }
+    if ($needscollabchat) {
+        $PAGE->requires->js(new moodle_url($cdn . '/js/embed-collab-chat.min.js'));
+    }
+
+    // Build the readiness check based on which globals we need.
+    if ($needscollabchat && $needscomments) {
+        $readycheck = "window.FastCommentsUI && widgetTarget && window.FastCommentsCollabChat && regionMain";
+    } else if ($needscollabchat) {
+        $readycheck = "window.FastCommentsCollabChat && regionMain";
+    } else {
+        $readycheck = "window.FastCommentsUI && widgetTarget";
+    }
+
+    // Build the init calls.
+    $initcalls = '';
+    if ($needscollabchat) {
+        $initcalls .= "
+            if (window.FastCommentsCollabChat && regionMain) {
+                var noOverflows = regionMain.querySelectorAll('.no-overflow');
+                for (var i = 0; i < noOverflows.length; i++) {
+                    noOverflows[i].classList.remove('no-overflow');
+                }
+                regionMain.classList.remove('no-overflow');
+                window.FastCommentsCollabChat(regionMain, {$jsonconfig});
+            }";
+    }
+    if ($needscomments) {
+        $initcalls .= "
+            if (window.FastCommentsUI && widgetTarget) {
+                window.FastCommentsUI(widgetTarget, {$jsonconfig});
+            }";
+    }
 
     // Register widget init code via Moodle's JS API.
     $PAGE->requires->js_init_code("
@@ -117,9 +159,10 @@ function local_fastcomments_before_footer() {
     function attemptToLoad() {
         attempts++;
         if (attempts > 200) { return; }
+        var regionMain = document.getElementById('region-main');
         var widgetTarget = document.getElementById('fastcomments-widget');
-        if (window.FastCommentsUI && widgetTarget) {
-            window.FastCommentsUI(widgetTarget, {$jsonconfig});
+        if ({$readycheck}) {
+            {$initcalls}
             return;
         }
         setTimeout(attemptToLoad, attempts > 50 ? 500 : 50);
@@ -128,7 +171,10 @@ function local_fastcomments_before_footer() {
 })();
     ");
 
-    $html = '<div id="fastcomments-widget"></div>';
+    $html = '';
+    if ($needscomments) {
+        $html = '<div id="fastcomments-widget"></div>';
+    }
 
     if ($tenantid === 'demo' && has_capability('moodle/site:config', \context_system::instance())) {
         $settingsurl = (new moodle_url('/admin/settings.php', ['section' => 'local_fastcomments']))->out(true);
