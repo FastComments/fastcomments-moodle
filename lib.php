@@ -128,7 +128,15 @@ function local_fastcomments_before_footer() {
 })();
     ");
 
-    return '<div id="fastcomments-widget"></div>';
+    $html = '<div id="fastcomments-widget"></div>';
+
+    if ($tenantid === 'demo' && has_capability('moodle/site:config', \context_system::instance())) {
+        $settingsurl = (new moodle_url('/admin/settings.php', ['section' => 'local_fastcomments']))->out(true);
+        $linktext = get_string('setup_banner', 'local_fastcomments');
+        $html = '<p><a href="' . $settingsurl . '">' . $linktext . '</a></p>' . $html;
+    }
+
+    return $html;
 }
 
 /**
@@ -235,14 +243,14 @@ function local_fastcomments_myprofile_navigation(
 
     $category = new \core_user\output\myprofile\category(
         'fastcomments',
-        get_string('pluginname', 'local_fastcomments'),
+        get_string('profile_category', 'local_fastcomments'),
         'privacyandpolicies'
     );
     $tree->add_category($category);
 
     $tree->add_node(new \core_user\output\myprofile\node(
         'fastcomments',
-        'preferences',
+        'fastcomments_preferences',
         get_string('preferences_link', 'local_fastcomments'),
         null,
         new moodle_url('/local/fastcomments/preferences.php')

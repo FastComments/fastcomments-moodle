@@ -35,8 +35,8 @@ if ($hassiteconfig) {
         ''
     ));
 
-    // API Secret (password field so it's masked).
-    $settings->add(new admin_setting_configpasswordunmask(
+    // API Secret (password field so it's masked, required when Secure SSO is selected).
+    $settings->add(new \local_fastcomments\admin\setting_apisecret(
         'local_fastcomments/apisecret',
         get_string('setting_apisecret', 'local_fastcomments'),
         get_string('setting_apisecret_desc', 'local_fastcomments'),

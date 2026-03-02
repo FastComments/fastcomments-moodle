@@ -33,18 +33,18 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('preferences_title', 'local_fastcomments'));
 $PAGE->set_heading(get_string('preferences_title', 'local_fastcomments'));
 
-$preferencesurl = new moodle_url('/user/preferences.php');
+$profileurl = new moodle_url('/user/profile.php');
 
 $form = new \local_fastcomments\form\preferences_form();
 
 if ($form->is_cancelled()) {
-    redirect($preferencesurl);
+    redirect($profileurl);
 }
 
 if ($data = $form->get_data()) {
     set_user_preference('local_fastcomments_optedinnotifications', $data->optedinnotifications);
     set_user_preference('local_fastcomments_optedinsubscriptionnotifications', $data->optedinsubscriptionnotifications);
-    redirect($preferencesurl, get_string('preferences_saved', 'local_fastcomments'), null,
+    redirect($profileurl, get_string('preferences_saved', 'local_fastcomments'), null,
         \core\output\notification::NOTIFY_SUCCESS);
 }
 
