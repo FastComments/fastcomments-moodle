@@ -24,13 +24,10 @@
 
 namespace local_fastcomments\admin;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * API secret setting that requires a value when SSO type is "secure".
  */
 class setting_apisecret extends \admin_setting_configpasswordunmask {
-
     /**
      * Validate the API secret value.
      *

@@ -35,7 +35,6 @@ use core_privacy\local\request\user_preference_provider;
  * user notification preferences.
  */
 class provider implements metadata_provider, user_preference_provider {
-
     /**
      * Describe the external data sent to FastComments.
      *

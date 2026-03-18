@@ -32,7 +32,6 @@ require_once($CFG->libdir . '/formslib.php');
  * Form for editing FastComments notification preferences.
  */
 class preferences_form extends \moodleform {
-
     /**
      * Define the form elements.
      */
