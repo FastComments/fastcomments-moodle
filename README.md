@@ -49,9 +49,7 @@ Comments can also go below course content and pages (modules, books, etc.). The 
 
 ## Installation
 
-1. Download or clone this repository into your Moodle installation:
-
-       git clone https://github.com/FastComments/fastcomments-moodle.git /path/to/moodle/local/fastcomments
+1. Get the plugin from the [Moodle Plugin Directory](https://moodle.org/plugins/local_fastcomments). You can install it directly from within Moodle's plugin installer, or download the ZIP and extract it into your Moodle installation at `/path/to/moodle/local/fastcomments`.
 
 2. Log in as a site administrator and visit **Site Administration > Notifications**. Moodle will detect the new plugin and run the install.
 
