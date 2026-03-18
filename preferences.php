@@ -44,8 +44,12 @@ if ($form->is_cancelled()) {
 if ($data = $form->get_data()) {
     set_user_preference('local_fastcomments_optedinnotifications', $data->optedinnotifications);
     set_user_preference('local_fastcomments_optedinsubscriptionnotifications', $data->optedinsubscriptionnotifications);
-    redirect($profileurl, get_string('preferences_saved', 'local_fastcomments'), null,
-        \core\output\notification::NOTIFY_SUCCESS);
+    redirect(
+        $profileurl,
+        get_string('preferences_saved', 'local_fastcomments'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 }
 
 // Load current preferences as defaults.

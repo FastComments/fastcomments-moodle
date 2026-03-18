@@ -26,8 +26,6 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Injects the FastComments widget before the page footer.
  *
@@ -56,12 +54,16 @@ function local_fastcomments_before_footer() {
     $scriptpath = $PAGE->url->get_path();
 
     $urlid = '';
-    if ($contextlevel == CONTEXT_MODULE && in_array('module', $enabledcontexts)
-            && preg_match('#/mod/\w+/view\.php$#', $scriptpath)) {
+    if (
+        $contextlevel == CONTEXT_MODULE && in_array('module', $enabledcontexts)
+            && preg_match('#/mod/\w+/view\.php$#', $scriptpath)
+    ) {
         // Only on module view pages (e.g. /mod/book/view.php).
         $urlid = 'moodle-cm-' . $PAGE->context->instanceid;
-    } else if ($contextlevel == CONTEXT_COURSE && in_array('course', $enabledcontexts)
-            && preg_match('#/course/view\.php$#', $scriptpath)) {
+    } else if (
+        $contextlevel == CONTEXT_COURSE && in_array('course', $enabledcontexts)
+            && preg_match('#/course/view\.php$#', $scriptpath)
+    ) {
         // Only on /course/view.php, not participants/grades/etc.
         $urlid = 'moodle-course-' . $PAGE->context->instanceid;
     } else {
@@ -95,7 +97,7 @@ function local_fastcomments_before_footer() {
     } else if ($ssotype === 'simple') {
         $config['simpleSSO'] = local_fastcomments_build_simple_sso($isloggedin, $loginurl);
     }
-    // ssotype === 'none': no SSO config added.
+    // SSO type 'none': no SSO config added.
 
     $commentstyle = get_config('local_fastcomments', 'commentstyle');
     if (empty($commentstyle)) {
@@ -103,7 +105,7 @@ function local_fastcomments_before_footer() {
     }
 
     $jsonconfig = json_encode($config, JSON_UNESCAPED_SLASHES);
-    $urlid_js = addslashes($urlid);
+    $urlidjs = addslashes($urlid);
 
     $needscomments = ($commentstyle === 'comments' || $commentstyle === 'collabchat_comments');
     $needscollabchat = ($commentstyle === 'collabchat' || $commentstyle === 'collabchat_comments');
@@ -151,10 +153,10 @@ function local_fastcomments_before_footer() {
     if (!window.fcInitializedById) {
         window.fcInitializedById = {};
     }
-    if (window.fcInitializedById['{$urlid_js}']) {
+    if (window.fcInitializedById['{$urlidjs}']) {
         return;
     }
-    window.fcInitializedById['{$urlid_js}'] = true;
+    window.fcInitializedById['{$urlidjs}'] = true;
     var attempts = 0;
     function attemptToLoad() {
         attempts++;
@@ -212,7 +214,8 @@ function local_fastcomments_build_secure_sso($isloggedin, $loginurl, $logouturl)
             'username' => fullname($USER),
             'optedInNotifications' => (bool)get_user_preferences('local_fastcomments_optedinnotifications', 1),
             'optedInSubscriptionNotifications' => (bool)get_user_preferences(
-                'local_fastcomments_optedinsubscriptionnotifications', 1
+                'local_fastcomments_optedinsubscriptionnotifications',
+                1
             ),
         ];
 
